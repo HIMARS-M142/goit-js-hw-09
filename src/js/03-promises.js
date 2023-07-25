@@ -31,4 +31,5 @@ form.addEventListener('submit', e => {
       });
     firstDelay += step;
   }
+  e.currentTarget.reset();
 });
