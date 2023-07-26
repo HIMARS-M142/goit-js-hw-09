@@ -3,6 +3,7 @@ import flatpickr from 'flatpickr';
 // Додатковий імпорт стилів
 import 'flatpickr/dist/flatpickr.min.css';
 const startBtn = document.querySelector('button[data-start]');
+const input = document.getElementById('datetime-picker');
 startBtn.disabled = true;
 let timerId = null;
 let isActive = false;
@@ -31,16 +32,15 @@ const options = {
         return;
       }
       isActive = true;
-
       timerId = setInterval(() => {
-        const timeToEvent = selectedDates[0].getTime() - Date.now();
+        let timeToEvent = selectedDates[0].getTime() - Date.now();
         const { days, hours, minutes, seconds } = convertMs(timeToEvent);
 
         document.querySelector('span[data-seconds]').textContent = seconds;
         document.querySelector('span[data-minutes]').textContent = minutes;
         document.querySelector('span[data-hours]').textContent = hours;
         document.querySelector('span[data-days]').textContent = days;
-        console.log(convertMs(timeToEvent));
+
         if (
           seconds === '00' &&
           minutes === '00' &&
@@ -49,8 +49,14 @@ const options = {
         ) {
           clearInterval(timerId);
           isActive = false;
+          input.disabled = false;
         }
       }, 1000);
+      if (SubmitEvent) {
+        isActive = true;
+        startBtn.disabled = true;
+        input.disabled = true;
+      }
     }
 
     function convertMs(ms) {
